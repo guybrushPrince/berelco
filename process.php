@@ -1,4 +1,5 @@
 <?php
+ini_set('memory_limit', '4096M');
 
 include_once "Xml2Array.php";
 include_once "Model.php";
@@ -215,7 +216,9 @@ foreach ($files as $file) {
 	        "visitedTotalCooccurrence"=> $BeRelCo->visitedTotalCooccurrence,
 	        "visitedCanTotalConflict" => $BeRelCo->visitedCanTotalConflict,
 	        "visitedRequires"         => $BeRelCo->visitedRequires,
-	        "visitedIndependent"      => $BeRelCo->visitedIndependent
+	        "visitedIndependent"      => $BeRelCo->visitedIndependent,
+			"insIntractable"		  => array_key_exists("intractable", $insRelations),
+			"inclusive"               => array_sum(array_map(function(Transition $t) { return $t->simulatesOR ? 1 : 0; }, $net->transitions))
 		];
 	}
 	

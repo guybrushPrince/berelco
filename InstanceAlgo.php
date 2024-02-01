@@ -4,6 +4,8 @@ include_once "Instance.php";
 
 class InstanceAlgo implements Algo {
 	
+	const MAX_NUMBER_INSTANCES = 500000;
+	
 	private int $visitedNodes = 0;
 	public int $visitedNodesHasPath = 0;
 	private array $virtualNodes = [];
@@ -26,7 +28,7 @@ class InstanceAlgo implements Algo {
 		}
 		while (count($instances) > 0) {
 			$vis++;
-			if (count($instances) > 100000) return []; // TODO
+			if (count($instances) > self::MAX_NUMBER_INSTANCES) return []; // TODO
 			foreach ($instances as $instance) {
 				$vis++;
 				$nInstances = $instance->step();
