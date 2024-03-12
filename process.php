@@ -62,7 +62,6 @@ foreach ($files as $file) {
         // Ignore cyclic nets yet.
 		$acyclic = !Parser::isCyclic($net);
 		if (!$acyclic) {
-			echo "\tcyclic" . PHP_EOL;
 			continue;
 		}
 		// Produce a DOT output.
