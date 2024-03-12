@@ -1,28 +1,32 @@
 <?php
+
+/**
+ * Class Xml2Array.
+ *
+ * Reads an XML file and transfers it into an array.
+ */
 class Xml2Array {
     
-    var $arrOutput = array();
-    var $resParser;
-    var $strXmlData;
+    private $arrOutput = array();
+    private $resParser;
+    private $strXmlData;
     
-    function parse($strInputXML) {
-    
-            $this->resParser = xml_parser_create ();
-            xml_set_object($this->resParser,$this);
-            xml_set_element_handler($this->resParser, "tagOpen", "tagClosed");
-            
-            xml_set_character_data_handler($this->resParser, "tagData");
-        
-            $this->strXmlData = xml_parse($this->resParser,$strInputXML );
-            if(!$this->strXmlData) {
-               die(sprintf("XML error: %s at line %d",
-            xml_error_string(xml_get_error_code($this->resParser)),
-            xml_get_current_line_number($this->resParser)));
-            }
-                            
-            xml_parser_free($this->resParser);
-            
-            return $this->arrOutput;
+    public function parse($strInputXML) {
+        $this->resParser = xml_parser_create();
+        xml_set_object($this->resParser,$this);
+        xml_set_element_handler($this->resParser, "tagOpen", "tagClosed");
+
+        xml_set_character_data_handler($this->resParser, "tagData");
+
+        $this->strXmlData = xml_parse($this->resParser,$strInputXML);
+        if(!$this->strXmlData) {
+            die(sprintf("XML error: %s at line %d", xml_error_string(xml_get_error_code($this->resParser)),
+                xml_get_current_line_number($this->resParser)));
+        }
+
+        xml_parser_free($this->resParser);
+
+        return $this->arrOutput;
     }
     function tagOpen($parser, $name, $attrs) {
        $tag=array("name"=>$name,"attrs"=>$attrs); 

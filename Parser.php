@@ -1,10 +1,18 @@
 <?php
 include_once "Model.php";
 
+/**
+ * Class Parser.
+ *
+ * Parses a net from PNML or JSON.
+ */
 class Parser {
-	/**
-	 *
-	 */
+
+    /**
+     * Parses a net from XML.
+     * @param array $xml The XML as array.
+     * @return array
+     */
 	public static function parsePNMLArray(array $xml) : array {
 		$nets = [];
 		foreach ($xml as $pnml) {
@@ -53,10 +61,12 @@ class Parser {
 		}
 		return $nets;
 	}
-	
-	/**
-	 *
-	 */
+
+    /**
+     * Checks whether the net is cyclic, or not.
+     * @param Net $net The net.
+     * @return bool
+     */
 	public static function isCyclic(Net $net) : bool {
 		$visited = [];
 		$recStack = [];
@@ -66,7 +76,15 @@ class Parser {
 		}
 		return false;
 	}
-	public static function isCyclicUtil(Node $node, array &$visited, array &$recStack) : bool {
+
+    /**
+     * A util method to support isCyclic.
+     * @param Node $node
+     * @param array $visited
+     * @param array $recStack
+     * @return bool
+     */
+	private static function isCyclicUtil(Node $node, array &$visited, array &$recStack) : bool {
 		if (array_key_exists($node->id, $recStack) && $recStack[$node->id]) return true;
 		if (array_key_exists($node->id, $visited) && $visited[$node->id]) return false;
 		
@@ -80,9 +98,11 @@ class Parser {
 		return false;
 	}
 
-	/**
-	 *
-	 */
+    /**
+     * Determines for each node of a set of nets the pre- and postsets.
+     * @param Net[] $nets The nets.
+     * @return void
+     */
 	public static function determinePrePostSets(array $nets) : void {
 		foreach ($nets as $net) {
 			foreach ($net->flows as $flow) {
@@ -97,7 +117,12 @@ class Parser {
 			});
 		}
 	}
-	
+
+    /**
+     * Parse a net from a JSON representation.
+     * @param string $json
+     * @return Net[]
+     */
 	public static function parseJSON(string $json) : array {
 		$model = json_decode($json, JSON_OBJECT_AS_ARRAY);
 		$net = new Net();

@@ -1,5 +1,5 @@
 <?php
-class Instance {
+class RunNet {
 	
 	public int $visitedNodes = 0;
 	
@@ -97,7 +97,7 @@ class Instance {
 							if (!$checkOR) {
 								$executed[] = $t;
 								$withTokens += $t->postset;
-								$instance = new Instance($this->net, $withTokens, $executed);
+								$instance = new RunNet($this->net, $withTokens, $executed);
 								$instances[$instance->id] = $instance;
 							} else {
 								$instances += $this->generateORInstances($this->net, $withTokens, $executed, $t);
@@ -123,7 +123,7 @@ class Instance {
 		foreach ($combis as $combi) {
 			$vis += 3;
 			$executedCopy = array_merge($executed, []);
-			$instance = new Instance($this->net, $withTokens + $combi, $executedCopy);
+			$instance = new RunNet($this->net, $withTokens + $combi, $executedCopy);
 			$instances[$instance->id] = $instance;
 		}
 		$this->visitedNodes += $vis;

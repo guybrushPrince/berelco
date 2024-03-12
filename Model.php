@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * Class Node.
+ */
 abstract class Node {
 	public string $id;
 	public string $name;
@@ -17,14 +21,23 @@ abstract class Node {
 	public array $remarkable = [];
 }
 
+/**
+ * Class Place.
+ */
 class Place extends Node {	
 	public bool $hasMarking = false;
 }
 
+/**
+ * Class Transition.
+ */
 class Transition extends Node {
 	public bool $simulatesOR = false;
 }
 
+/**
+ * Class Flow.
+ */
 class Flow {
 	public string $id;
 	public Node $source;
@@ -37,6 +50,9 @@ class Flow {
 	}
 }
 
+/**
+ * Class Net.
+ */
 class Net {
 	public string $id;
 	
@@ -45,12 +61,5 @@ class Net {
 	public array $flows = [];
 	public array $starts = [];
 	public array $ends = [];
-}
-
-class Loop {
-	public array $nodes = [];
-	public array $entries = [];
-	public array $exits = [];
-	public array $doBody = [];
 }
 ?>

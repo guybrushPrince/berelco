@@ -1,6 +1,6 @@
-# CP
+# BeRelCo
 
-Implementation of the Concurrent Paths (CP) Algorithm.
+Implementation of the Behavioral Relation Computations (BeRelCo) Algorithms.
 
 You can start the algorithm with 
 ```cmd

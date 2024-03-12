@@ -1,29 +1,40 @@
 <?php
+
+/**
+ * Class Util.
+ *
+ * Contains some methods to support the organization.
+ */
 class Util {
-	public static function printSet(array $concurrency) {
-		$keys = array_keys($concurrency);
+
+    /**
+     * Prints the keys of an array sorted.
+     * @param array $arr The array with keys.
+     * @return array
+     */
+	public static function printSet(array $arr) : array {
+		$keys = array_keys($arr);
 		sort($keys);
 		echo json_encode($keys) . PHP_EOL;
-		return $concurrency;
+		return $arr;
 	}
 
-	public static function toDot(Net $net, $loops = null) : string {
-		if ($loops instanceof Loop) $loops = [ $loops ];
+    /**
+     * Produces a DOT presentation of the net.
+     * @param Net $net The net.
+     * @return string
+     */
+	public static function toDot(Net $net) : string {
 		return 'digraph PNML {' . PHP_EOL .
-		implode(PHP_EOL, array_map(function(Node $node) use ($net, $loops) : string {
-			return $node->id . '[' . ($node instanceof Transition ? 'shape="box" ' : 'shape="circle" ') . 'label="' . $node->id . '"' . (array_key_exists($node->id, $net->starts) ? ' color = gold' : '') . 
-			    (array_key_exists($node->id, $net->ends) ? ' color = aquamarine' : (
-				($loops && array_reduce($loops, function (bool $e, Loop $loop) use ($node) { return $e || array_key_exists($node->id, $loop->doBody); }, false) ? 'color = blue' : 
-				($loops && array_reduce($loops, function (bool $e, Loop $loop) use ($node) { return $e || array_key_exists($node->id, $loop->nodes); }, false) ? 'color = red' : '')))) . ']';
+		implode(PHP_EOL, array_map(function(Node $node) use ($net) : string {
+			return $node->id . '[' . ($node instanceof Transition ? 'shape="box" ' : 'shape="circle" ') .
+                'label="' . $node->id . '"' . (array_key_exists($node->id, $net->starts) ? ' color = gold' : '') .
+			    (array_key_exists($node->id, $net->ends) ? ' color = aquamarine' : '') . ']';
 		}, $net->places + $net->transitions)) . PHP_EOL .
 		implode(PHP_EOL, array_map(function(Flow $flow) : string {
 			return $flow->source->id . '->' . $flow->target->id;
 		}, $net->flows)) . PHP_EOL .
 		'}';
-	}
-
-	public static function filterMixedForCompare(array $R) : array {
-		return array_filter($R, function($k) { return !strpos(' ' . $k, 't'); }, ARRAY_FILTER_USE_KEY);
 	}
 	
 	/**
@@ -32,14 +43,14 @@ class Util {
 	 * @param array $files The files.
 	 * @param string $fileType The ending of the file.
 	 */
-	public static function determineFiles(string $folder, array &$files, string $fileType) {
+	public static function determineFiles(string $folder, array &$files, string $fileType) : void {
 		$folder = dirname(__FILE__) . "/" . $folder;
 		$folder = realpath($folder);
 
 		if ($folder) {
 			$dir = new RecursiveDirectoryIterator($folder);
 			$iterator = new RecursiveIteratorIterator($dir);
-			$regex = new RegexIterator($iterator, "/^.+" . $fileType . "$/i", RecursiveRegexIterator::GET_MATCH);
+			$regex = new RegexIterator($iterator, "/^.+" . $fileType . "$/i", RegexIterator::GET_MATCH);
 			$regex->next();
 			while ($regex->valid()) {
 				$file = $regex->current();
